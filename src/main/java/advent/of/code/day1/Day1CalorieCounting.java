@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Day1CalorieCounting {
+import advent.of.code.Day;
+
+public class Day1CalorieCounting extends Day {
 
 	public int part1() {
 		return totalCaloriesOfMostCalorificElf(getInputPath());
@@ -44,12 +46,7 @@ public class Day1CalorieCounting {
 	}
 
 	public List<Elf> parseInput(Path inputFile) {
-		Iterator<String> lines;
-		try {
-			lines = Files.readAllLines(inputFile).iterator();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		final Iterator<String> lines = readLines(inputFile).iterator();
 		final List<Elf> elves = new ArrayList<>();
 		List<Integer> items = new ArrayList<>();
 		while (lines.hasNext()) {
@@ -65,15 +62,6 @@ public class Day1CalorieCounting {
 			elves.add(new Elf(items));
 		}
 		return elves;
-	}
-
-	private Path getInputPath() {
-		final var inputUrl = getClass().getResource("input.txt");
-		try {
-			return Path.of(inputUrl.toURI());
-		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 }

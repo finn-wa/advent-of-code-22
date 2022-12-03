@@ -5,26 +5,19 @@ package advent.of.code.day1;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class Day1Test {
+import advent.of.code.DayTest;
+
+class Day1Test extends DayTest {
 
 	final Day1CalorieCounting day = new Day1CalorieCounting();
-	Path inputPath;
-
-	@BeforeEach
-	void setup() throws URISyntaxException {
-		inputPath = Path.of(Day1Test.class.getResource("input-test.txt").toURI()).toAbsolutePath();
-	}
 
 	@Test
 	void testParseInput() {
-		assertThat(day.parseInput(inputPath))
+		assertThat(day.parseInput(getInputPath()))
 			.containsExactly(
 				new Elf(List.of(1000, 2000, 3000)),
 				new Elf(List.of(4000)),
@@ -36,11 +29,11 @@ class Day1Test {
 
 	@Test
 	void testMostCalorificElf() {
-		assertThat(day.totalCaloriesOfMostCalorificElf(inputPath)).isEqualTo(24000);
+		assertThat(day.totalCaloriesOfMostCalorificElf(getInputPath())).isEqualTo(24000);
 	}
 
 	@Test
 	public void testTopThreeElves() {
-		assertThat(day.totalCaloriesOfTopThreeMostCalorificElves(inputPath)).isEqualTo(45000);
+		assertThat(day.totalCaloriesOfTopThreeMostCalorificElves(getInputPath())).isEqualTo(45000);
 	}
 }
