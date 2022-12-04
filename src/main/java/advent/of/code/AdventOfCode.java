@@ -10,7 +10,7 @@ public class AdventOfCode {
 
 	public static void main(String[] args) throws Exception {
 		System.out.println(day2.part1());
-		// System.out.println(day1.part2());
+		System.out.println(day2.part2());
 	}
 
 }

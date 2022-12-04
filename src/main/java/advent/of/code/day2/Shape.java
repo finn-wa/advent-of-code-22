@@ -14,21 +14,22 @@ public enum Shape {
 
 	private final int id;
 	private final int canBeatId;
-	final int scoreValue;
+	private final int points;
 	private final Predicate<String> matcher;
 
-	private Shape(int id, int canBeatId, int scoreValue, String... matchLetters) {
+	private Shape(int id, int canBeatId, int points, String... matchLetters) {
 		this.id = id;
 		this.canBeatId = canBeatId;
-		this.scoreValue = scoreValue;
+		this.points = points;
 		this.matcher = Pattern
 			.compile("^[%s]$".formatted(Arrays.stream(matchLetters).collect(joining())))
 			.asMatchPredicate();
 	}
 
 	public static Shape fromString(String str) {
+		final var letter = str.trim();
 		return Arrays.stream(Shape.values())
-			.filter(shape -> shape.matches(str))
+			.filter(shape -> shape.matcher.test(letter))
 			.findFirst()
 			.orElseThrow(
 				() -> new NoSuchElementException("No shape matches input \"%s\"".formatted(str))
@@ -44,10 +45,6 @@ public enum Shape {
 		return 0;
 	}
 
-	public boolean matches(String move) {
-		return matcher.test(move.trim());
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -56,8 +53,8 @@ public enum Shape {
 		return canBeatId;
 	}
 
-	public int getScoreValue() {
-		return scoreValue;
+	public int getPoints() {
+		return points;
 	}
 
 }
