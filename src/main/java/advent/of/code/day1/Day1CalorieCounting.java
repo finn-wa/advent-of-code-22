@@ -3,9 +3,6 @@ package advent.of.code.day1;
 import static java.util.Comparator.*;
 import static java.util.stream.Collectors.summingInt;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
