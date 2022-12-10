@@ -8,8 +8,16 @@ import java.util.List;
 
 public class Day {
 
-	protected Path getInputPath() {
-		final var inputUrl = getClass().getResource("input.txt");
+	protected List<String> getInput() {
+		return readLines(resolvePath("input.txt"));
+	}
+
+	protected List<String> getTestInput() {
+		return readLines(resolvePath("input-test.txt"));
+	}
+
+	protected Path resolvePath(String path) {
+		final var inputUrl = getClass().getResource(path);
 		try {
 			return Path.of(inputUrl.toURI());
 		} catch (URISyntaxException e) {

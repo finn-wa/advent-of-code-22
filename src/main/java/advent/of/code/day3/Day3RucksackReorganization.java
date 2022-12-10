@@ -32,7 +32,7 @@ public class Day3RucksackReorganization extends Day {
 		.collect(toMap(Entry::getKey, Entry::getValue));
 
 	public void part1() {
-		final var sum = readLines(getInputPath()).stream()
+		final var sum = readLines(resolvePath("input.txt")).stream()
 			.mapToInt(line -> {
 				final int midpoint = line.length() / 2;
 				final var compartment1 = line.substring(0, midpoint)
@@ -62,7 +62,7 @@ public class Day3RucksackReorganization extends Day {
 	}
 
 	public void part2() {
-		final List<String> inputLines = readLines(getInputPath());
+		final List<String> inputLines = readLines(resolvePath("input.txt"));
 		final LinkedList<Set<String>> elfSets = new LinkedList<>();
 		elfSets.add(new HashSet<>(3));
 		final var lines = inputLines.iterator();
