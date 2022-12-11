@@ -1,10 +1,11 @@
 package advent.of.code.day4;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
-import advent.of.code.Day;
+import advent.of.code.DayV2;
 
-public class Day4CampCleanup extends Day {
+public class Day4CampCleanup extends DayV2 {
 	static record Range(
 		int start,
 		int end
@@ -37,8 +38,7 @@ public class Day4CampCleanup extends Day {
 		6-6,4-6
 		2-6,4-8""";
 
-	public void part1() {
-		final var lines = readLines(getInputPath());
+	public void part1(List<String> lines) {
 		final var count = lines.stream()
 			.map(
 				line -> linePattern.splitAsStream(line)
@@ -55,8 +55,7 @@ public class Day4CampCleanup extends Day {
 		System.out.println("Total: " + count);
 	}
 
-	public void part2() {
-		final var lines = readLines(getInputPath());
+	public void part2(List<String> lines) {
 		final var count = lines.stream()
 			.map(
 				line -> linePattern.splitAsStream(line)
