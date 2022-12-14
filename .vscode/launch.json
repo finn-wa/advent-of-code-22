@@ -8,7 +8,8 @@
       "type": "java",
       "name": "Launch AdventOfCode",
       "request": "launch",
-      "mainClass": "advent.of.code.AdventOfCode"
+      "mainClass": "advent.of.code.AdventOfCode",
+      "args": "-ea"
     }
   ]
 }
