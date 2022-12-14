@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
