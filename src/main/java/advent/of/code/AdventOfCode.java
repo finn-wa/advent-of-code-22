@@ -1,6 +1,7 @@
 package advent.of.code;
 
 import advent.of.code.day1.Day1CalorieCounting;
+import advent.of.code.day10.Day10CathodeRayTube;
 import advent.of.code.day2.Day2RockPaperScissors;
 import advent.of.code.day3.Day3RucksackReorganization;
 import advent.of.code.day4.Day4CampCleanup;
@@ -21,9 +22,10 @@ public class AdventOfCode {
 	static final Day7NoSpaceLeftOnDevice day7 = new Day7NoSpaceLeftOnDevice();
 	static final Day8TreetopTreeHouse day8 = new Day8TreetopTreeHouse();
 	static final Day9RopeBridge day9 = new Day9RopeBridge();
+	static final Day10CathodeRayTube day10 = new Day10CathodeRayTube();
 
 	public static void main(String[] args) throws Exception {
-		day9.part2(day9.getInput());
+		day10.part1(day10.getTestInput());
 	}
 
 }
