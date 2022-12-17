@@ -25,7 +25,7 @@ public class AdventOfCode {
 	static final Day10CathodeRayTube day10 = new Day10CathodeRayTube();
 
 	public static void main(String[] args) throws Exception {
-		day10.part1(day10.getTestInput());
+		day10.part2(day10.getInput());
 	}
 
 }
