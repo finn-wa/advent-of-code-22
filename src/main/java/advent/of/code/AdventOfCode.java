@@ -23,7 +23,7 @@ public class AdventOfCode {
 	static final Day9RopeBridge day9 = new Day9RopeBridge();
 
 	public static void main(String[] args) throws Exception {
-		day9.part1(day9.getInput());
+		day9.part2(day9.getInput());
 	}
 
 }
