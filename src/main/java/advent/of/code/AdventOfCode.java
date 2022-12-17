@@ -8,6 +8,7 @@ import advent.of.code.day5.Day5SupplyStacks;
 import advent.of.code.day6.Day6TuningTrouble;
 import advent.of.code.day7.Day7NoSpaceLeftOnDevice;
 import advent.of.code.day8.Day8TreetopTreeHouse;
+import advent.of.code.day9.Day9RopeBridge;
 
 public class AdventOfCode {
 
@@ -19,9 +20,10 @@ public class AdventOfCode {
 	static final Day6TuningTrouble day6 = new Day6TuningTrouble();
 	static final Day7NoSpaceLeftOnDevice day7 = new Day7NoSpaceLeftOnDevice();
 	static final Day8TreetopTreeHouse day8 = new Day8TreetopTreeHouse();
+	static final Day9RopeBridge day9 = new Day9RopeBridge();
 
 	public static void main(String[] args) throws Exception {
-		day8.part2(day8.getInput());
+		day9.part1(day9.getInput());
 	}
 
 }
