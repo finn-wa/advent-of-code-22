@@ -1,6 +1,8 @@
 package advent.of.code.day13;
 
+import java.util.List;
+
 record PacketPair(
-	Packet left,
-	Packet right
+	List<Value<?>> left,
+	List<Value<?>> right
 ) {}

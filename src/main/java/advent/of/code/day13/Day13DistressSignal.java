@@ -6,29 +6,33 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Objects;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import advent.of.code.DayV2;
 
 public class Day13DistressSignal extends DayV2 {
-	private final Logger LOGGER = Logger.getLogger("Day13");
+	private final Logger LOGGER = LoggerFactory.getLogger(Day13DistressSignal.class);
 	private final Pattern TOKEN_PATTERN = Pattern.compile("\\[|\\]|,|\\d+");
 
 	@Override
 	public void part1(List<String> lines) {
-		final var pairs = parseInput(lines);
+		final var pairs = parseInputPart1(lines);
 		int sum = 0;
 		for (int i = 0; i < pairs.size(); i++) {
 			final int pairNum = i + 1;
-			LOGGER.info("%n== Pair %d ==".formatted(pairNum));
+			LOGGER.debug("%n== Pair %d ==".formatted(pairNum));
 			final var pair = pairs.get(i);
 			final var result = determineListValueOrder(
-				pair.left().data(),
-				pair.right().data()
+				pair.left(),
+				pair.right()
 			);
 			if (result.equals(OrderResult.ORDERED)) {
 				sum += pairNum;
@@ -37,10 +41,44 @@ public class Day13DistressSignal extends DayV2 {
 		LOGGER.info("Result: " + sum);
 	}
 
+	@Override
+	public void part2(List<String> lines) {
+		final var inputPackets = lines.stream()
+			.map(this::parsePacket)
+			.filter(Objects::nonNull)
+			.map(ListValue::new);
+		final var dividerPackets = Stream.of(2, 6).map(this::dividerPacket).toList();
+		final var packets = Stream.concat(inputPackets, dividerPackets.stream())
+			.sorted((o1, o2) -> determineOrder(o1, o2).getValue())
+			.toList();
+		final var result = dividerPackets.stream()
+			.mapToInt(packets::indexOf)
+			.map(i -> i + 1)
+			.reduce(Math::multiplyExact)
+			.getAsInt();
+		LOGGER.info("Result: " + result);
+	}
+
+	private ListValue dividerPacket(Integer value) {
+		final var innerList = new ListValue(List.of(new IntValue(value)));
+		return new ListValue(List.of(innerList));
+	}
+
 	enum OrderResult {
-		INCONCLUSIVE,
-		UNORDERED,
-		ORDERED
+		INCONCLUSIVE(0),
+		UNORDERED(1),
+		ORDERED(-1);
+
+		private final int value;
+
+		private OrderResult(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+
 	}
 
 	OrderResult determineOrder(Value<?> left, Value<?> right) {
@@ -69,30 +107,29 @@ public class Day13DistressSignal extends DayV2 {
 	}
 
 	private OrderResult determineIntValueOrder(int left, int right) {
-		LOGGER.info("Compare ints %s vs %s".formatted(left, right));
+		LOGGER.debug("Compare ints %s vs %s".formatted(left, right));
 		if (left == right) {
-			// logger.info("Left == right -> INCONCLUSIVE");
 			return INCONCLUSIVE;
 		}
 		if (left < right) {
-			LOGGER.info("Left is smaller -> ORDERED");
+			LOGGER.debug("Left is smaller -> ORDERED");
 			return ORDERED;
 		}
-		LOGGER.info("Right is smaller -> UNORDERED");
+		LOGGER.debug("Right is smaller -> UNORDERED");
 		return UNORDERED;
 	}
 
 	private OrderResult determineListValueOrder(List<Value<?>> left, List<Value<?>> right) {
-		LOGGER.info("Compare lists %s vs %s".formatted(left, right));
+		LOGGER.debug("Compare lists %s vs %s".formatted(left, right));
 		final var leftIter = left.iterator();
 		final var rightIter = right.iterator();
 		while (leftIter.hasNext() || rightIter.hasNext()) {
 			if (leftIter.hasNext() && !rightIter.hasNext()) {
-				LOGGER.info("Right ran out of items -> UNORDERED");
+				LOGGER.debug("Right ran out of items -> UNORDERED");
 				return UNORDERED;
 			}
 			if (!leftIter.hasNext() && rightIter.hasNext()) {
-				LOGGER.info("Left ran out of items -> ORDERED");
+				LOGGER.debug("Left ran out of items -> ORDERED");
 				return ORDERED;
 			}
 			// both have next
@@ -104,7 +141,7 @@ public class Day13DistressSignal extends DayV2 {
 		return INCONCLUSIVE;
 	}
 
-	List<PacketPair> parseInput(List<String> lines) {
+	List<PacketPair> parseInputPart1(List<String> lines) {
 		final List<PacketPair> pairs = new ArrayList<>();
 		final var iter = lines.stream().iterator();
 		while (iter.hasNext()) {
@@ -122,7 +159,7 @@ public class Day13DistressSignal extends DayV2 {
 	}
 
 	@Nullable
-	Packet parsePacket(String line) {
+	List<Value<?>> parsePacket(String line) {
 		if (line.isBlank()) {
 			return null;
 		}
@@ -138,7 +175,7 @@ public class Day13DistressSignal extends DayV2 {
 			} else if (token.equals("]")) {
 				final var completed = openLists.removeLast();
 				if (openLists.isEmpty()) {
-					return new Packet(completed);
+					return completed;
 				}
 				openLists.peekLast().add(new ListValue(completed));
 			} else if (token.equals(",")) {
@@ -149,12 +186,6 @@ public class Day13DistressSignal extends DayV2 {
 			}
 		}
 		throw new IllegalStateException("unexpected end of packet");
-	}
-
-	@Override
-	public void part2(List<String> lines) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

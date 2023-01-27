@@ -1,7 +1,9 @@
 package advent.of.code.day7;
 
 import java.util.List;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import advent.of.code.DayV2;
 import advent.of.code.day7.file.DataFile;
@@ -10,7 +12,7 @@ import advent.of.code.day7.file.File;
 import advent.of.code.day7.file.Root;
 
 public class Day7NoSpaceLeftOnDevice extends DayV2 {
-	final Logger logger = Logger.getLogger("Day7");
+	final Logger logger = LoggerFactory.getLogger(Day7NoSpaceLeftOnDevice.class);
 
 	final Root root = new Root();
 	Dir wd = root;
@@ -90,9 +92,9 @@ public class Day7NoSpaceLeftOnDevice extends DayV2 {
 		if (childDir instanceof Dir) {
 			return (Dir) childDir;
 		} else if (childDir == null) {
-			logger.warning("Directory '%s' not found".formatted(targetDirName));
+			logger.warn("Directory '%s' not found".formatted(targetDirName));
 		} else {
-			logger.warning("Child '%s' is not a directory".formatted(targetDirName));
+			logger.warn("Child '%s' is not a directory".formatted(targetDirName));
 		}
 		return wd;
 	}

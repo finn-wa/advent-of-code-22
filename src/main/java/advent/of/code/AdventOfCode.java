@@ -16,13 +16,6 @@ import advent.of.code.day9.Day9RopeBridge;
 
 public class AdventOfCode {
 
-	static {
-		System.setProperty(
-			"java.util.logging.SimpleFormatter.format",
-			"%5$s %n"
-		);
-	}
-
 	static final Day1CalorieCounting day1 = new Day1CalorieCounting();
 	static final Day2RockPaperScissors day2 = new Day2RockPaperScissors();
 	static final Day3RucksackReorganization day3 = new Day3RucksackReorganization();
@@ -38,7 +31,7 @@ public class AdventOfCode {
 	static final Day13DistressSignal day13 = new Day13DistressSignal();
 
 	public static void main(String[] args) throws Exception {
-		day13.part1(day13.getInput());
+		day13.part2(day13.getInput());
 	}
 
 }
