@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.simple.SimpleLogger;
 
-import advent.of.code.day13.Day13DistressSignal;
+import advent.of.code.day14.Day14RegolithReservoir;
 
 public class AdventOfCode {
 
@@ -15,7 +15,7 @@ public class AdventOfCode {
 		System.setProperty(SimpleLogger.SHOW_THREAD_NAME_KEY, "false");
 		System.setProperty(SimpleLogger.SHOW_SHORT_LOG_NAME_KEY, "true");
 	}
-	public static final DayV2 DAY = new Day13DistressSignal();
+	public static final DayV2 DAY = new Day14RegolithReservoir();
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdventOfCode.class);
 
 	public static void main(String[] args) throws Exception {
