@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import advent.of.code.DayV2;
 
 public class Day13DistressSignal extends DayV2 {
-	private final Logger LOGGER = LoggerFactory.getLogger(Day13DistressSignal.class);
-	private final Pattern TOKEN_PATTERN = Pattern.compile("\\[|\\]|,|\\d+");
+	private static final Logger LOGGER = LoggerFactory.getLogger(Day13DistressSignal.class);
+	private static final Pattern TOKEN_PATTERN = Pattern.compile("\\[|\\]|,|\\d+");
 
 	@Override
 	public void part1(List<String> lines) {

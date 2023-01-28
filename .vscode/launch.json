@@ -3,13 +3,29 @@
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
+  "inputs": [
+    {
+      "id": "part",
+      "options": ["1", "2"],
+      "default": "1",
+      "description": "Part",
+      "type": "pickString"
+    },
+    {
+      "id": "dataset",
+      "options": ["test", "main"],
+      "default": "test",
+      "description": "Data set to use",
+      "type": "pickString"
+    }
+  ],
   "configurations": [
     {
       "type": "java",
       "name": "Launch AdventOfCode",
       "request": "launch",
       "mainClass": "advent.of.code.AdventOfCode",
-      "args": "-ea"
+      "args": ["-ea", "--part=${input:part}", "--dataset=${input:dataset}"]
     }
   ]
 }

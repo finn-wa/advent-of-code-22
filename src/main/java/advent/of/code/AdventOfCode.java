@@ -1,37 +1,44 @@
 package advent.of.code;
 
-import advent.of.code.day1.Day1CalorieCounting;
-import advent.of.code.day10.Day10CathodeRayTube;
-import advent.of.code.day11.Day11MonkeyInTheMiddle;
-import advent.of.code.day12.Day12HillClimbingAlgorithm;
+import java.util.Arrays;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.simple.SimpleLogger;
+
 import advent.of.code.day13.Day13DistressSignal;
-import advent.of.code.day2.Day2RockPaperScissors;
-import advent.of.code.day3.Day3RucksackReorganization;
-import advent.of.code.day4.Day4CampCleanup;
-import advent.of.code.day5.Day5SupplyStacks;
-import advent.of.code.day6.Day6TuningTrouble;
-import advent.of.code.day7.Day7NoSpaceLeftOnDevice;
-import advent.of.code.day8.Day8TreetopTreeHouse;
-import advent.of.code.day9.Day9RopeBridge;
 
 public class AdventOfCode {
 
-	static final Day1CalorieCounting day1 = new Day1CalorieCounting();
-	static final Day2RockPaperScissors day2 = new Day2RockPaperScissors();
-	static final Day3RucksackReorganization day3 = new Day3RucksackReorganization();
-	static final Day4CampCleanup day4 = new Day4CampCleanup();
-	static final Day5SupplyStacks day5 = new Day5SupplyStacks();
-	static final Day6TuningTrouble day6 = new Day6TuningTrouble();
-	static final Day7NoSpaceLeftOnDevice day7 = new Day7NoSpaceLeftOnDevice();
-	static final Day8TreetopTreeHouse day8 = new Day8TreetopTreeHouse();
-	static final Day9RopeBridge day9 = new Day9RopeBridge();
-	static final Day10CathodeRayTube day10 = new Day10CathodeRayTube();
-	static final Day11MonkeyInTheMiddle day11 = new Day11MonkeyInTheMiddle();
-	static final Day12HillClimbingAlgorithm day12 = new Day12HillClimbingAlgorithm();
-	static final Day13DistressSignal day13 = new Day13DistressSignal();
+	static {
+		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "info");
+		System.setProperty(SimpleLogger.SHOW_THREAD_NAME_KEY, "false");
+		System.setProperty(SimpleLogger.SHOW_SHORT_LOG_NAME_KEY, "true");
+	}
+	public static final DayV2 DAY = new Day13DistressSignal();
+	private static final Logger LOGGER = LoggerFactory.getLogger(AdventOfCode.class);
 
 	public static void main(String[] args) throws Exception {
-		day13.part2(day13.getInput());
+		final String part = getArgValue(args, "part", "1");
+		final String dataset = getArgValue(args, "dataset", "test");
+		final var input = dataset.equals("test") ? DAY.getTestInput() : DAY.getInput();
+		if (part.equals("1")) {
+			DAY.part1(input);
+		} else if (part.equals("2")) {
+			DAY.part2(input);
+		} else {
+			throw new IllegalArgumentException("Invalid part: " + part);
+		}
+	}
+
+	private static String getArgValue(String[] args, String argName, String defaultValue) {
+		final String value = Arrays.stream(args)
+			.filter(arg -> arg.startsWith("--" + argName))
+			.findFirst()
+			.map(arg -> arg.substring(argName.length() + 3))
+			.orElse(defaultValue);
+		LOGGER.info("{} = {}", argName, defaultValue);
+		return value;
 	}
 
 }
