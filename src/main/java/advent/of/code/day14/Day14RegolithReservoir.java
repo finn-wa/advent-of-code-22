@@ -7,10 +7,12 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import advent.of.code.DayV2;
-import advent.of.code.day14.Tile.State;
+import advent.of.code.day14.CaveTile.State;
+import advent.of.code.shared.Coord;
+import advent.of.code.shared.Display;
 
 public class Day14RegolithReservoir extends DayV2 {
-	private static final boolean RENDER_ENABLED = false;
+	private static final boolean RENDER_ENABLED = true;
 	private static final String DELIMITER = " -> ";
 	private Display display;
 	private final Coord sandSource = new Coord(500, 0);
@@ -20,8 +22,11 @@ public class Day14RegolithReservoir extends DayV2 {
 		final var paths = parseInput(lines);
 		final var min = reduceCoordFromPaths(paths, Math::min);
 		final var max = reduceCoordFromPaths(paths, Math::max);
-		display = new Display(new Coord(min.x(), 0), new Coord(max.x(), max.y()));
-		display.tileAt(sandSource).setState(State.SAND_SOURCE);
+		display = new Display(
+			new Coord(min.x(), 0),
+			new Coord(max.x(), max.y())
+		);
+		display.set(sandSource, State.SAND_SOURCE);
 		for (final var path : paths) {
 			drawRock(path);
 			render();
@@ -41,7 +46,7 @@ public class Day14RegolithReservoir extends DayV2 {
 		final var max = reduceCoordFromPaths(paths, Math::max);
 		final int floorLevel = max.y() + 2;
 		display = new Display(new Coord(400, 0), new Coord(600, floorLevel + 1));
-		display.tileAt(sandSource).setState(State.SAND_SOURCE);
+		display.set(sandSource, State.SAND_SOURCE);
 		for (final var path : paths) {
 			drawRock(path);
 			render();
@@ -92,13 +97,13 @@ public class Day14RegolithReservoir extends DayV2 {
 				final int min = Math.min(from.y(), to.y());
 				final int max = Math.max(from.y(), to.y());
 				for (int y = min; y <= max; y++) {
-					display.tileAt(to.x(), y).setState(State.ROCK);
+					display.set(to.x(), y, State.ROCK);
 				}
 			} else {
 				final int min = Math.min(from.x(), to.x());
 				final int max = Math.max(from.x(), to.x());
 				for (int x = min; x <= max; x++) {
-					display.tileAt(x, to.y()).setState(State.ROCK);
+					display.set(x, to.y(), State.ROCK);
 				}
 			}
 			from = to;
@@ -119,7 +124,7 @@ public class Day14RegolithReservoir extends DayV2 {
 		if (pos.y() >= abyssY) {
 			return false;
 		}
-		display.tileAt(pos).setState(State.SAND);
+		display.set(pos, State.SAND);
 		return true;
 	}
 
@@ -130,12 +135,12 @@ public class Day14RegolithReservoir extends DayV2 {
 			pos = nextPos;
 			nextPos = nextGrainPosition(pos);
 		}
-		display.tileAt(pos).setState(State.SAND);
+		display.set(pos, State.SAND);
 		return pos;
 	}
 
 	Coord nextGrainPosition(Coord pos) {
-		final Predicate<Coord> isAir = coord -> display.tileAt(coord).getState().equals(State.AIR);
+		final Predicate<Coord> isAir = coord -> display.get(coord) == State.AIR.getLetter();
 		final Coord down = new Coord(pos.x(), pos.y() + 1);
 		if (isAir.test(down)) {
 			return down;
@@ -157,8 +162,15 @@ public class Day14RegolithReservoir extends DayV2 {
 
 	List<Coord> parseLine(String line) {
 		return Arrays.stream(line.split(DELIMITER))
-			.map(Coord::parse)
+			.map(this::parseCoord)
 			.toList();
+	}
+
+	Coord parseCoord(String raw) {
+		final int[] values = Arrays.stream(raw.split(","))
+			.mapToInt(Integer::parseInt)
+			.toArray();
+		return new Coord(values[0], values[1]);
 	}
 
 }

@@ -1,5 +1,7 @@
 package advent.of.code.day14;
 
+import advent.of.code.shared.Coord;
+
 class SandGrain {
 	private Coord coord;
 	private boolean atRest;
