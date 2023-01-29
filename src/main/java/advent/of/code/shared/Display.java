@@ -3,6 +3,7 @@ package advent.of.code.shared;
 import java.util.PrimitiveIterator.OfInt;
 import java.util.TreeMap;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class Display {
 	private final Coord windowMin;
@@ -18,12 +19,12 @@ public class Display {
 		// render x ticks
 		final int tickHeight = 3;
 		final String tickFormat = "%" + tickHeight + "d";
-		final var xTicks = IntStream.range(windowMin.x(), windowMax.x())
+		final var xTicks = LongStream.range(windowMin.x(), windowMax.x())
 			.mapToObj(tickFormat::formatted)
 			.map(num -> num.chars().iterator())
 			.toList();
 		for (int i = 0; i < tickHeight; i++) {
-			String line = "  ";
+			String line = "    ";
 			for (OfInt tickDigits : xTicks) {
 				line += (char) tickDigits.next().intValue();
 				line += "|";
@@ -31,9 +32,9 @@ public class Display {
 			System.out.println(line);
 		}
 		// render grid
-		for (int y = windowMin.y(); y <= windowMax.y(); y++) {
-			String line = y + " ";
-			for (int x = windowMin.x(); x <= windowMax.x(); x++) {
+		for (long y = windowMin.y(); y <= windowMax.y(); y++) {
+			String line = "%3d ".formatted(y);
+			for (long x = windowMin.x(); x <= windowMax.x(); x++) {
 				line += get(x, y) + " ";
 			}
 			System.out.println(line);
@@ -45,7 +46,7 @@ public class Display {
 		return tiles.getOrDefault(coord, '.');
 	}
 
-	public char get(int x, int y) {
+	public char get(long x, long y) {
 		return get(new Coord(x, y));
 	}
 
@@ -54,7 +55,7 @@ public class Display {
 		char getLetter();
 	}
 
-	public void set(int x, int y, Letter letter) {
+	public void set(long x, long y, Letter letter) {
 		set(new Coord(x, y), letter);
 	}
 

@@ -1,17 +1,17 @@
 package advent.of.code.shared;
 
-import static java.util.Comparator.comparingInt;
+import static java.util.Comparator.comparingLong;
 
 import java.util.Comparator;
 
 public record Coord(
 	/** Distance to the right */
-	int x,
+	long x,
 	/** Distance down */
-	int y
+	long y
 ) implements Comparable<Coord> {
-	private static final Comparator<Coord> COMPARATOR = comparingInt(Coord::y)
-		.thenComparing(comparingInt(Coord::x));
+	private static final Comparator<Coord> COMPARATOR = comparingLong(Coord::y)
+		.thenComparing(comparingLong(Coord::x));
 
 	@Override
 	public int compareTo(Coord o) {

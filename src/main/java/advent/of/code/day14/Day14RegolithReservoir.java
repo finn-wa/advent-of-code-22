@@ -2,9 +2,9 @@ package advent.of.code.day14;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.IntBinaryOperator;
+import java.util.function.LongBinaryOperator;
 import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
 
 import advent.of.code.DayV2;
 import advent.of.code.day14.CaveTile.State;
@@ -44,7 +44,7 @@ public class Day14RegolithReservoir extends DayV2 {
 	public void part2(List<String> lines) {
 		final var paths = parseInput(lines);
 		final var max = reduceCoordFromPaths(paths, Math::max);
-		final int floorLevel = max.y() + 2;
+		final long floorLevel = max.y() + 2;
 		display = new Display(new Coord(400, 0), new Coord(600, floorLevel + 1));
 		display.set(sandSource, State.SAND_SOURCE);
 		for (final var path : paths) {
@@ -76,15 +76,15 @@ public class Day14RegolithReservoir extends DayV2 {
 		}
 	}
 
-	private Coord reduceCoordFromPaths(List<List<Coord>> paths, IntBinaryOperator reducer) {
-		final ToIntFunction<ToIntFunction<Coord>> reduceProperty = (getter) -> paths.stream()
+	private Coord reduceCoordFromPaths(List<List<Coord>> paths, LongBinaryOperator reducer) {
+		final ToLongFunction<ToLongFunction<Coord>> reduceProperty = (getter) -> paths.stream()
 			.flatMap(List::stream)
-			.mapToInt(getter)
+			.mapToLong(getter)
 			.reduce(reducer)
 			.orElseThrow();
 		return new Coord(
-			reduceProperty.applyAsInt(Coord::x),
-			reduceProperty.applyAsInt(Coord::y)
+			reduceProperty.applyAsLong(Coord::x),
+			reduceProperty.applyAsLong(Coord::y)
 		);
 	}
 
@@ -94,15 +94,15 @@ public class Day14RegolithReservoir extends DayV2 {
 		while (pathsIter.hasNext()) {
 			Coord to = pathsIter.next();
 			if (from.x() == to.x()) {
-				final int min = Math.min(from.y(), to.y());
-				final int max = Math.max(from.y(), to.y());
-				for (int y = min; y <= max; y++) {
+				final long min = Math.min(from.y(), to.y());
+				final long max = Math.max(from.y(), to.y());
+				for (long y = min; y <= max; y++) {
 					display.set(to.x(), y, State.ROCK);
 				}
 			} else {
-				final int min = Math.min(from.x(), to.x());
-				final int max = Math.max(from.x(), to.x());
-				for (int x = min; x <= max; x++) {
+				final long min = Math.min(from.x(), to.x());
+				final long max = Math.max(from.x(), to.x());
+				for (long x = min; x <= max; x++) {
 					display.set(x, to.y(), State.ROCK);
 				}
 			}
@@ -114,7 +114,7 @@ public class Day14RegolithReservoir extends DayV2 {
 	 * @param abyssY point at which grain falls into abyss
 	 * @return true if grain was stacked, false if grain fell into abyss
 	 */
-	public boolean stackGrainPart1(int abyssY) {
+	public boolean stackGrainPart1(long abyssY) {
 		Coord pos = sandSource;
 		Coord nextPos = nextGrainPosition(pos);
 		while (!pos.equals(nextPos) && pos.y() < abyssY) {
@@ -167,8 +167,8 @@ public class Day14RegolithReservoir extends DayV2 {
 	}
 
 	Coord parseCoord(String raw) {
-		final int[] values = Arrays.stream(raw.split(","))
-			.mapToInt(Integer::parseInt)
+		final long[] values = Arrays.stream(raw.split(","))
+			.mapToLong(Long::parseLong)
 			.toArray();
 		return new Coord(values[0], values[1]);
 	}

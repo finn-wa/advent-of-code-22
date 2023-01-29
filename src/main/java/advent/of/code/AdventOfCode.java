@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.simple.SimpleLogger;
 
 import advent.of.code.day14.Day14RegolithReservoir;
+import advent.of.code.day15.Day15BeaconExclusionZone;
 
 public class AdventOfCode {
 
@@ -15,12 +16,14 @@ public class AdventOfCode {
 		System.setProperty(SimpleLogger.SHOW_THREAD_NAME_KEY, "false");
 		System.setProperty(SimpleLogger.SHOW_SHORT_LOG_NAME_KEY, "true");
 	}
-	public static final DayV2 DAY = new Day14RegolithReservoir();
+	public static final DayV2 DAY = new Day15BeaconExclusionZone();
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdventOfCode.class);
 
 	public static void main(String[] args) throws Exception {
 		final String part = getArgValue(args, "part", "1");
 		final String dataset = getArgValue(args, "dataset", "test");
+		LOGGER.info(DAY.getClass().getSimpleName());
+		LOGGER.info("Part {} - {} dataset", part, dataset);
 		final var input = dataset.equals("test") ? DAY.getTestInput() : DAY.getInput();
 		if (part.equals("1")) {
 			DAY.part1(input);
@@ -37,7 +40,7 @@ public class AdventOfCode {
 			.findFirst()
 			.map(arg -> arg.substring(argName.length() + 3))
 			.orElse(defaultValue);
-		LOGGER.info("{} = {}", argName, value);
+		LOGGER.debug("{} = {}", argName, value);
 		return value;
 	}
 
