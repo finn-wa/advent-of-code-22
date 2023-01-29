@@ -10,10 +10,9 @@ import advent.of.code.DayV2;
 import advent.of.code.day14.Tile.State;
 
 public class Day14RegolithReservoir extends DayV2 {
-	private static final boolean RENDER_ENABLED = true;
+	private static final boolean RENDER_ENABLED = false;
 	private static final String DELIMITER = " -> ";
 	private Display display;
-	private int abyssY;
 	private final Coord sandSource = new Coord(500, 0);
 
 	@Override
@@ -21,20 +20,49 @@ public class Day14RegolithReservoir extends DayV2 {
 		final var paths = parseInput(lines);
 		final var min = reduceCoordFromPaths(paths, Math::min);
 		final var max = reduceCoordFromPaths(paths, Math::max);
-		abyssY = max.y();
 		display = new Display(new Coord(min.x(), 0), new Coord(max.x(), max.y()));
-		display.tileAt(sandSource).get().setState(State.SAND_SOURCE);
+		display.tileAt(sandSource).setState(State.SAND_SOURCE);
 		for (final var path : paths) {
 			drawRock(path);
 			render();
 		}
 		int grains = 0;
-		while (stackGrain()) {
+		while (stackGrainPart1(max.y())) {
 			System.out.println("%n%d".formatted(grains));
 			grains++;
 			render();
 		}
 		System.out.println("Max grains: " + grains);
+	}
+
+	@Override
+	public void part2(List<String> lines) {
+		final var paths = parseInput(lines);
+		final var max = reduceCoordFromPaths(paths, Math::max);
+		final int floorLevel = max.y() + 2;
+		display = new Display(new Coord(400, 0), new Coord(600, floorLevel + 1));
+		display.tileAt(sandSource).setState(State.SAND_SOURCE);
+		for (final var path : paths) {
+			drawRock(path);
+			render();
+		}
+		// draw floor
+		drawRock(
+			List.of(
+				new Coord(0, floorLevel),
+				new Coord(999, floorLevel)
+			)
+		);
+		render();
+		int grains = 1;
+		while (!stackGrainPart2().equals(sandSource)) {
+			if (grains % 500 == 0) {
+				System.out.println(grains);
+			}
+			grains++;
+			render();
+		}
+		System.out.println("Stacked grains: " + grains);
 	}
 
 	private void render() {
@@ -64,13 +92,13 @@ public class Day14RegolithReservoir extends DayV2 {
 				final int min = Math.min(from.y(), to.y());
 				final int max = Math.max(from.y(), to.y());
 				for (int y = min; y <= max; y++) {
-					display.tileAt(to.x(), y).get().setState(State.ROCK);
+					display.tileAt(to.x(), y).setState(State.ROCK);
 				}
 			} else {
 				final int min = Math.min(from.x(), to.x());
 				final int max = Math.max(from.x(), to.x());
 				for (int x = min; x <= max; x++) {
-					display.tileAt(x, to.y()).get().setState(State.ROCK);
+					display.tileAt(x, to.y()).setState(State.ROCK);
 				}
 			}
 			from = to;
@@ -78,9 +106,10 @@ public class Day14RegolithReservoir extends DayV2 {
 	}
 
 	/**
+	 * @param abyssY point at which grain falls into abyss
 	 * @return true if grain was stacked, false if grain fell into abyss
 	 */
-	public boolean stackGrain() {
+	public boolean stackGrainPart1(int abyssY) {
 		Coord pos = sandSource;
 		Coord nextPos = nextGrainPosition(pos);
 		while (!pos.equals(nextPos) && pos.y() < abyssY) {
@@ -90,14 +119,23 @@ public class Day14RegolithReservoir extends DayV2 {
 		if (pos.y() >= abyssY) {
 			return false;
 		}
-		display.tileAt(pos).get().setState(State.SAND);
+		display.tileAt(pos).setState(State.SAND);
 		return true;
 	}
 
+	public Coord stackGrainPart2() {
+		Coord pos = sandSource;
+		Coord nextPos = nextGrainPosition(pos);
+		while (!pos.equals(nextPos)) {
+			pos = nextPos;
+			nextPos = nextGrainPosition(pos);
+		}
+		display.tileAt(pos).setState(State.SAND);
+		return pos;
+	}
+
 	Coord nextGrainPosition(Coord pos) {
-		final Predicate<Coord> isAir = coord -> display.tileAt(coord)
-			.map(tile -> tile.getState().equals(State.AIR))
-			.orElse(false);
+		final Predicate<Coord> isAir = coord -> display.tileAt(coord).getState().equals(State.AIR);
 		final Coord down = new Coord(pos.x(), pos.y() + 1);
 		if (isAir.test(down)) {
 			return down;
@@ -121,12 +159,6 @@ public class Day14RegolithReservoir extends DayV2 {
 		return Arrays.stream(line.split(DELIMITER))
 			.map(Coord::parse)
 			.toList();
-	}
-
-	@Override
-	public void part2(List<String> lines) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

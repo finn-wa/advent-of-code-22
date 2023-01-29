@@ -1,6 +1,5 @@
 package advent.of.code.day14;
 
-import java.util.Optional;
 import java.util.PrimitiveIterator.OfInt;
 import java.util.stream.IntStream;
 
@@ -14,7 +13,7 @@ public class Display {
 	public Display(Coord windowMin, Coord windowMax) {
 		this.windowMin = windowMin;
 		this.windowMax = windowMax;
-		this.grid = new Tile[200][1000];
+		this.grid = new Tile[300][1000];
 		for (int y = 0; y < grid.length; y++) {
 			for (int x = 0; x < grid[0].length; x++) {
 				grid[y][x] = new Tile(State.AIR);
@@ -42,22 +41,25 @@ public class Display {
 		for (int y = windowMin.y(); y <= windowMax.y(); y++) {
 			String line = y + " ";
 			for (int x = windowMin.x(); x <= windowMax.x(); x++) {
-				line += tileAt(x, y).get().render() + " ";
+				line += tileAt(x, y).render() + " ";
 			}
 			System.out.println(line);
 		}
 
 	}
 
-	public Optional<Tile> tileAt(Coord coord) {
+	public Tile tileAt(Coord coord) {
 		return tileAt(coord.x(), coord.y());
 	}
 
-	public Optional<Tile> tileAt(int x, int y) {
+	public Tile tileAt(int x, int y) {
 		if (0 <= y && y < grid.length && 0 <= x && x < grid[0].length) {
-			return Optional.of(grid[y][x]);
+			return grid[y][x];
 		}
-		return Optional.empty();
+		throw new IndexOutOfBoundsException(
+			"Coord [%d, %d] is out of bounds (max [%d, %d])"
+				.formatted(x, y, grid[0].length, grid.length)
+		);
 	}
 
 }

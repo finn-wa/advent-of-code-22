@@ -37,7 +37,7 @@ public class AdventOfCode {
 			.findFirst()
 			.map(arg -> arg.substring(argName.length() + 3))
 			.orElse(defaultValue);
-		LOGGER.info("{} = {}", argName, defaultValue);
+		LOGGER.info("{} = {}", argName, value);
 		return value;
 	}
 
