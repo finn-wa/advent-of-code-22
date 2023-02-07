@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.simple.SimpleLogger;
 
-import advent.of.code.day14.Day14RegolithReservoir;
 import advent.of.code.day15.Day15BeaconExclusionZone;
 
 public class AdventOfCode {

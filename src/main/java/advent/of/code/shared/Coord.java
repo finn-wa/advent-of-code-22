@@ -17,4 +17,12 @@ public record Coord(
 	public int compareTo(Coord o) {
 		return COMPARATOR.compare(this, o);
 	}
+
+	public static long distanceBetween(Coord c1, Coord c2) {
+		return Math.abs(c1.x - c2.x) + Math.abs(c1.y - c2.y);
+	}
+
+	public long distanceTo(Coord other) {
+		return distanceBetween(this, other);
+	}
 }
