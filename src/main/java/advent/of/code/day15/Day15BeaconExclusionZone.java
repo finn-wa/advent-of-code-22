@@ -3,6 +3,7 @@ package advent.of.code.day15;
 import static java.util.stream.LongStream.rangeClosed;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import advent.of.code.DayV2;
+import advent.of.code.shared.Bounds;
 import advent.of.code.shared.Coord;
 import advent.of.code.shared.Display;
 import advent.of.code.shared.Display.Letter;
@@ -55,6 +57,7 @@ public class Day15BeaconExclusionZone extends DayV2 {
 
 	@Override
 	public void part2(List<String> lines) {
+
 		display = new Display(new Coord(-10, -10), new Coord(30, 30));
 		display.setRenderEnabled(false);
 		sensors = lines.stream().map(this::parseLine).toList();
@@ -62,7 +65,7 @@ public class Day15BeaconExclusionZone extends DayV2 {
 			LOGGER.info("Adding sensor {}", sensor);
 			addSensorToDisplay(sensor);
 		}
-		System.out.println(findBeaconPositions(4_000_000));
+		System.out.println("Tuning freq: " + findDistressBeacon(4_000_000).tuningFrequency());
 	}
 
 	private void addSensorToDisplay(Sensor sensor) {
@@ -107,36 +110,24 @@ public class Day15BeaconExclusionZone extends DayV2 {
 			.count();
 	}
 
-	private Coord findBeaconPositions(long max) {
-		final var bounds = display.getBounds();
-		final var count = rangeClosed(0L, max)
-			.boxed()
-			.flatMap(
-				x -> rangeClosed(0L, max).mapToObj(y -> new Coord(x, y))
-			)
-			.peek(new Consumer<Coord>() {
-				private int count = 0;
-				private int rowCount = 0;
-
-				@Override
-				public void accept(Coord t) {
-					count++;
-					if (count >= 4_000_000) {
-						rowCount++;
-						LOGGER.info("Row {}", rowCount);
-						count = 0;
-					}
-				}
-
-			})
-			.filter(pos -> TunnelTile.AIR.letterEquals(display.get(pos)))
-			.filter(
-				pos -> sensors.stream()
-					.allMatch(sensor -> sensor.range() < sensor.position().distanceTo(pos))
-			)
-
-			.count();
-		LOGGER.info("Count {}", count);
+	private Coord findDistressBeacon(long max) {
+		final var bounds = new Bounds(new Coord(0, 0), new Coord(max, max));
+		for (final var sensor : sensors) {
+			System.out.println("Searching around sensor " + sensor.position);
+			final Optional<Coord> distressBeacon = sensor.position()
+				.diamondPoints(sensor.range() + 1L)
+				.stream()
+				.filter(
+					pos -> bounds.inBounds(pos, 0L)
+						&& sensors.stream().allMatch(s -> s.range() < s.position().distanceTo(pos))
+				)
+				.findFirst();
+			if (distressBeacon.isPresent()) {
+				final Coord position = distressBeacon.get();
+				System.out.println("Found distress beacon! " + position);
+				return position;
+			}
+		}
 		return null;
 	}
 
