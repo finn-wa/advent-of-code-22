@@ -4,7 +4,6 @@ import static java.util.stream.LongStream.rangeClosed;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -28,7 +27,7 @@ public class Day15BeaconExclusionZone extends DayV2 {
 		AIR('.'),
 		SENSOR('S'),
 		BEACON('B'),
-		RANGE('#');
+		RANGE('o');
 
 		private final char letter;
 
@@ -46,11 +45,12 @@ public class Day15BeaconExclusionZone extends DayV2 {
 	@Override
 	public void part1(List<String> lines) {
 		display = new Display(new Coord(-10, -10), new Coord(30, 30));
-		display.setRenderEnabled(false);
+		display.setRenderEnabled(true);
 		sensors = lines.stream().map(this::parseLine).toList();
 		for (final var sensor : sensors) {
 			LOGGER.info("Adding sensor {}", sensor);
 			addSensorToDisplay(sensor);
+			renderRange(sensor);
 		}
 		System.out.println(countNonBeaconPositions(2_000_000));
 	}
