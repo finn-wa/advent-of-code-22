@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.simple.SimpleLogger;
 
-import advent.of.code.day15.Day15BeaconExclusionZone;
+import advent.of.code.day16.Day16ProboscideaVolcanium;
 
 public class AdventOfCode {
 
@@ -15,7 +15,7 @@ public class AdventOfCode {
 		System.setProperty(SimpleLogger.SHOW_THREAD_NAME_KEY, "false");
 		System.setProperty(SimpleLogger.SHOW_SHORT_LOG_NAME_KEY, "true");
 	}
-	public static final DayV2 DAY = new Day15BeaconExclusionZone();
+	public static final DayV2 DAY = new Day16ProboscideaVolcanium();
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdventOfCode.class);
 
 	public static void main(String[] args) throws Exception {
