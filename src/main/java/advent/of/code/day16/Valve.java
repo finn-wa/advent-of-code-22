@@ -2,6 +2,7 @@ package advent.of.code.day16;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -9,6 +10,10 @@ public class Valve {
 	private final String label;
 	private final int flowRate;
 	private final List<String> neighbours;
+	/** The distance to each valve by its label */
+	private Map<String, Integer> signpost;
+
+	private boolean open = false;
 
 	private static final Pattern pattern = Pattern.compile(
 		"^Valve ([A-Z]{2}) has flow rate=(\\d+); tunnels? leads? to valves? ([\\w, ]+)"
@@ -47,10 +52,26 @@ public class Valve {
 		return neighbours;
 	}
 
+	public boolean isClosed() {
+		return !open;
+	}
+
+	public void open() {
+		this.open = true;
+	}
+
+	public Map<String, Integer> getSignpost() {
+		return signpost;
+	}
+
+	public void setSignpost(Map<String, Integer> signpost) {
+		this.signpost = signpost;
+	}
+
 	@Override
 	public String toString() {
 		return "Valve [label=" + label + ", flowRate=" + flowRate + ", neighbours=" + neighbours
-			+ "]";
+			+ ", signpost=" + signpost + ", open=" + open + "]";
 	}
 
 }
