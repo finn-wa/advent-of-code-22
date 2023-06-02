@@ -1,8 +1,10 @@
 package advent.of.code.day16;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -10,8 +12,8 @@ public class Valve {
 	private final String label;
 	private final int flowRate;
 	private final List<String> neighbours;
-	/** The distance to each valve by its label */
-	private Map<String, Integer> signpost;
+	/** The distance to each valve in the network */
+	private Map<Valve, Integer> signpost;
 
 	private boolean open = false;
 
@@ -40,6 +42,33 @@ public class Valve {
 		return new Valve(label, flowRate, neighbours);
 	}
 
+	public void open() {
+		this.open = true;
+	}
+
+	public int distanceTo(Valve other) {
+		return signpost.get(other);
+	}
+
+	public void findPaths(List<Path> paths, int minsLeft) {
+
+		// if no more valves to open
+		// return paths;
+	}
+
+	public int potentialEventualPressure(int minsLeft) {
+		return open ? 0 : flowRate * minsLeft;
+	}
+
+	public Valve bestValveToOpen(int minsLeft) {
+		final Comparator<Entry<Valve, Integer>> bestValveComparator = Comparator
+			.comparing(entry -> {
+				final Valve valve = entry.getKey();
+				return valve.potentialEventualPressure(minsLeft - distanceTo(valve) - 1);
+			});
+		return signpost.entrySet().stream().max(bestValveComparator).get().getKey();
+	}
+
 	public String getLabel() {
 		return label;
 	}
@@ -56,15 +85,7 @@ public class Valve {
 		return !open;
 	}
 
-	public void open() {
-		this.open = true;
-	}
-
-	public Map<String, Integer> getSignpost() {
-		return signpost;
-	}
-
-	public void setSignpost(Map<String, Integer> signpost) {
+	public void setSignpost(Map<Valve, Integer> signpost) {
 		this.signpost = signpost;
 	}
 

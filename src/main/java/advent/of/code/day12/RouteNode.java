@@ -13,7 +13,12 @@ public class RouteNode extends Node implements Comparable<RouteNode> {
 		this(current, null, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
 	}
 
-	RouteNode(Node current, RouteNode previous, double routeScore, double estimatedScore) {
+	RouteNode(
+		Node current,
+		RouteNode previous,
+		double routeScore,
+		double estimatedScore
+	) {
 		super(current.location, current.height);
 		this.previous = previous;
 		this.routeScore = routeScore;
