@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import advent.of.code.DayV2;
 
@@ -35,11 +36,11 @@ public class Day16ProboscideaVolcanium extends DayV2 {
 	}
 
 	private void initSignposts() {
-		final int[][] distance = getDistanceMatrix();
+		final Path[][] distance = getShortestPaths();
 		printDistanceMatrix(distance);
 		for (int i = 0; i < numValves; i++) {
 			final Valve origin = valves.get(i);
-			final Map<Valve, Integer> signpost = new HashMap<>(numValves);
+			final Map<Valve, Path> signpost = new HashMap<>(numValves);
 			for (int j = 0; j < numValves; j++) {
 				final Valve destination = valves.get(j);
 				signpost.put(destination, distance[i][j]);
@@ -48,22 +49,23 @@ public class Day16ProboscideaVolcanium extends DayV2 {
 		}
 	}
 
-	private int[][] getDistanceMatrix() {
+	private Path[][] getShortestPaths() {
 		/** distance[x][y] is equal to the best distance between the valves at indices x, y */
-		final int[][] distance = new int[numValves][numValves];
+		final Path[][] distance = new Path[numValves][numValves];
 		// Populate initial known values
 		for (int i = 0; i < numValves; i++) {
 			for (int j = 0; j < numValves; j++) {
 				if (i == j) {
 					// Distance to self is 0, which is the initial value of the array elements
+					distance[i][j] = new Path(List.of(), 0);
 					continue;
 				}
 				final Valve from = valves.get(i);
 				final Valve to = valves.get(j);
 				if (from.getNeighbours().contains(to.getLabel())) {
-					distance[i][j] = 1;
+					distance[i][j] = new Path(List.of(to), 1);
 				} else {
-					distance[i][j] = INF;
+					distance[i][j] = new Path(null, INF);
 				}
 			}
 		}
@@ -71,14 +73,20 @@ public class Day16ProboscideaVolcanium extends DayV2 {
 		for (int k = 0; k < numValves; k++) {
 			for (int i = 0; i < numValves; i++) {
 				for (int j = 0; j < numValves; j++) {
-					distance[i][j] = Math.min(distance[i][j], distance[i][k] + distance[k][j]);
+					final var current = distance[i][j];
+					final var path1 = distance[i][k];
+					final var path2 = distance[k][j];
+					if (current.length() <= path1.length() + path2.length()) {
+						continue;
+					}
+					distance[i][j] = path1.join(path2);
 				}
 			}
 		}
 		return distance;
 	}
 
-	private void printDistanceMatrix(int[][] matrix) {
+	private void printDistanceMatrix(Path[][] matrix) {
 		System.out.print("   ");
 		for (int x = 0; x < valves.size(); x++) {
 			System.out.print(valves.get(x).getLabel() + " ");
@@ -88,9 +96,9 @@ public class Day16ProboscideaVolcanium extends DayV2 {
 			System.out.print(valves.get(y).getLabel() + " ");
 			for (int x = 0; x < matrix.length; x++) {
 				System.out.print(
-					matrix[x][y] == INF
+					matrix[x][y].length() == INF
 						? "∞  "
-						: String.format("%d  ", matrix[x][y])
+						: String.format("%d  ", matrix[x][y].length())
 				);
 			}
 			System.out.println();

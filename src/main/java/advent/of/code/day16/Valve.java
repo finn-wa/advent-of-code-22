@@ -13,7 +13,7 @@ public class Valve {
 	private final int flowRate;
 	private final List<String> neighbours;
 	/** The distance to each valve in the network */
-	private Map<Valve, Integer> signpost;
+	private Map<Valve, Path> signpost;
 
 	private boolean open = false;
 
@@ -47,7 +47,7 @@ public class Valve {
 	}
 
 	public int distanceTo(Valve other) {
-		return signpost.get(other);
+		return signpost.get(other).length();
 	}
 
 	public void findPaths(List<Path> paths, int minsLeft) {
@@ -61,7 +61,7 @@ public class Valve {
 	}
 
 	public Valve bestValveToOpen(int minsLeft) {
-		final Comparator<Entry<Valve, Integer>> bestValveComparator = Comparator
+		final Comparator<Entry<Valve, Path>> bestValveComparator = Comparator
 			.comparing(entry -> {
 				final Valve valve = entry.getKey();
 				return valve.potentialEventualPressure(minsLeft - distanceTo(valve) - 1);
@@ -85,7 +85,7 @@ public class Valve {
 		return !open;
 	}
 
-	public void setSignpost(Map<Valve, Integer> signpost) {
+	public void setSignpost(Map<Valve, Path> signpost) {
 		this.signpost = signpost;
 	}
 
